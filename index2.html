@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <title>ForexRate.ai — Live Forex Rates, Converter & Market Updates</title>
+  <meta name="description" content="Track forex prices, convert currencies, and monitor major markets on a clean, fast, mobile-first interface. API-ready for live feeds." />
+  <link rel="canonical" href="https://forexrate.ai" />
+
+  <meta property="og:title" content="ForexRate.ai — Live Forex Rates, Converter & Market Updates" />
+  <meta property="og:description" content="Fast, clean, mobile-first experience for forex, metals and indices. API-ready." />
+  <meta property="og:type" content="website" />
+
+  <meta name="robots" content="index,follow" />
+  <meta name="theme-color" content="#0a3d91" />
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/" aria-label="ForexRate.ai — Home">
+        <span class="brand-mark">ƒx</span>
+        <span class="brand-name">ForexRate<span class="dot">.ai</span></span>
+      </a>
+
+      <nav class="nav" aria-label="Primary">
+        <a href="#prices" class="nav-link">Prices</a>
+        <a href="#converter" class="nav-link">Converter</a>
+        <a href="#news" class="nav-link">News</a>
+        <a href="#calendar" class="nav-link">Calendar</a>
+        <a href="#about" class="nav-link">About</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-copy">
+          <h1>Live Forex Rates & Currency Converter</h1>
+          <p class="sub">Track major currency pairs, metals and indices in a clean, fast, mobile-first interface.</p>
+
+          <div class="status">
+            <span class="dot-live" aria-hidden="true"></span>
+            <span>UI Active • <strong id="clock">--:--:--</strong> <span class="tz">GMT</span></span>
+          </div>
+
+          <div class="searchbar" role="search">
+            <input id="pairSearch" type="search" placeholder="Search pair (e.g., EURUSD, XAUUSD, DXY)" aria-label="Search symbol or pair">
+            <button class="btn" id="btnSearch" aria-label="Search">Search</button>
+          </div>
+        </div>
+
+        <div class="hero-card" aria-labelledby="market-summary">
+          <h2 id="market-summary">Quick Market Snapshot</h2>
+          <ul class="snapshot" id="snapshotList" aria-live="polite"></ul>
+          <p class="disclaimer">Indicative placeholder rates. Not for trading.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="prices" class="section">
+      <div class="container">
+        <div class="section-head">
+          <h2>Major Pairs & Metals</h2>
+          <div class="refresh">
+            Auto-refresh: <strong>off</strong> (static v1) • <button class="link" id="simulateTick">Simulate Tick</button>
+          </div>
+        </div>
+        <div class="grid prices-grid" id="pricesGrid" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="converter" class="section alt">
+      <div class="container">
+        <h2>Currency Converter</h2>
+        <form class="converter" onsubmit="return false;" aria-describedby="conv-note">
+          <div class="field">
+            <label for="amount">Amount</label>
+            <input id="amount" type="number" inputmode="decimal" value="100" min="0" step="any" />
+          </div>
+          <div class="field">
+            <label for="fromCur">From</label>
+            <select id="fromCur"></select>
+          </div>
+          <div class="field">
+            <label for="toCur">To</label>
+            <select id="toCur"></select>
+          </div>
+          <button class="btn" id="btnConvert" aria-label="Convert now">Convert</button>
+        </form>
+
+        <div class="conv-result" id="convResult" role="status" aria-live="polite"></div>
+        <p id="conv-note" class="note">v1 uses static demo rates for speed. v2 will connect to a live API.</p>
+      </div>
+    </section>
+
+    <section class="section" id="tabs">
+      <div class="container">
+        <div class="tabs" role="tablist" aria-label="Market info">
+          <button class="tab active" role="tab" aria-selected="true" aria-controls="news">News</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="calendar">Calendar</button>
+          <button class="tab" role="tab" aria-selected="false" aria-controls="about">About</button>
+        </div>
+
+        <div id="news" class="tab-panel active" role="tabpanel">
+          <ul class="news-list" id="newsList">
+            <li><a href="#">Dollar steady ahead of key CPI; traders eye Fed path</a><time>Today</time></li>
+            <li><a href="#">Euro slips as yields cool; focus on growth data</a><time>Today</time></li>
+            <li><a href="#">Gold holds near range as real yields soften</a><time>Today</time></li>
+            <li><a href="#">Yen watch: intervention chatter returns</a><time>Yesterday</time></li>
+          </ul>
+          <p class="note">RSS/live headlines will be wired in v2.</p>
+        </div>
+
+        <div id="calendar" class="tab-panel" role="tabpanel">
+          <table class="calendar">
+            <thead>
+              <tr><th>Time (GMT)</th><th>Event</th><th>Cur.</th><th>Impact</th><th>Prev</th><th>Forecast</th></tr>
+            </thead>
+            <tbody id="calBody">
+              <tr><td>09:00</td><td>EU GDP (QoQ)</td><td>EUR</td><td><span class="imp imp-2">Med</span></td><td>0.3%</td><td>0.2%</td></tr>
+              <tr><td>13:30</td><td>US CPI (YoY)</td><td>USD</td><td><span class="imp imp-3">High</span></td><td>3.4%</td><td>3.3%</td></tr>
+              <tr><td>15:00</td><td>US Michigan Sentiment</td><td>USD</td><td><span class="imp imp-1">Low</span></td><td>68.0</td><td>69.2</td></tr>
+            </tbody>
+          </table>
+          <p class="note">Calendar is a static sample. v2 will plug a fast feed.</p>
+        </div>
+
+        <div id="about" class="tab-panel" role="tabpanel">
+          <article class="about">
+            <h3>About ForexRate.ai</h3>
+            <p>ForexRate.ai is a clean, fast, mobile-first interface for forex, metals and major indices. v1 uses static rates for speed and reliability while we integrate a live multi-asset feed.</p>
+            <p><strong>Disclaimer:</strong> All information is indicative and not for trading or investment advice.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> ForexRate.ai • All rights reserved.</p>
+      <nav class="footer-nav" aria-label="Footer">
+        <a href="#" class="foot-link">Disclaimer</a>
+        <a href="#" class="foot-link">Privacy</a>
+        <a href="#" class="foot-link">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
